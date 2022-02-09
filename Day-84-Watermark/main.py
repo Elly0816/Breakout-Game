@@ -19,7 +19,7 @@ class WaterMarker:
         self.label = None
         self.open_image = None
 
-# This opens an ask open file dialog from the tkinter module in order to pick the image that you want to watermark
+    # This opens an ask open file dialog from the tkinter module in order to pick the image that you want to watermark
     def adds_image(self):
         filetypes = (('image files', ('*.jpg', '*.png*', '*.png', '*.svg', '*.webp')),
                      ('All files', '*.*'))
@@ -38,14 +38,14 @@ class WaterMarker:
             picture.save(f'image/{self.name}')
             self.label.configure(image=self.img)
 
-# This adds a watermark on the image, I could not show the watermarked image dynamically
+    # This adds a watermark on the image, I could not show the watermarked image dynamically
     def marks_image(self):
         image = Image.open(f'image/{self.name}')
         width, height = image.size
-        font = ImageFont.truetype("arial.ttf", 46)
+        font_ = ImageFont.truetype("arial.ttf", 46)
         text = self.text_entry.get()
         edit_image = ImageDraw2.Draw(image)
-        edit_image.text((width/1.5, height/1.5), text=text, font=font, color="red")
+        edit_image.text((width / 1.5, height / 1.5), text=text, font=font_, color="red")
         self.text_entry.insert(0, "Creating Your WaterMark...")
         image = image.convert('RGB')
         image.save(f"watermarked/watermarked-{self.name}")
@@ -55,15 +55,15 @@ class WaterMarker:
         self.open_image.config(state='normal')
         self.text_entry.delete(0, END)
 
-# When the show watermarked button is clicked, file explorer opens the location in which it was saved
+    # When the show watermarked button is clicked, file explorer opens the location in which it was saved
     def shows_image(self):
         directory = 'watermarked'
-        parent_dir = os.path.join(os.getcwd(), directory)
-        file = os.path.join(parent_dir, f"watermarked-{self.name}")
-        if os.path.isfile(file):
+        parent_dir_ = os.path.join(os.getcwd(), directory)
+        file_ = os.path.join(parent_dir_, f"watermarked-{self.name}")
+        if os.path.isfile(file_):
             os.startfile(parent_dir)
 
-# This dynamically resizes the image when the window is resized
+    # This dynamically resizes the image when the window is resized
     def img_resizer(self, e):
         try:
             bg1 = Image.open(f"image/{self.name}")
@@ -72,7 +72,7 @@ class WaterMarker:
         except FileNotFoundError:
             pass
         else:
-            resized_bg = bg1.resize((e.width, e.height-5), Image.ANTIALIAS)
+            resized_bg = bg1.resize((e.width, e.height - 5), Image.ANTIALIAS)
             self.img = ImageTk.PhotoImage(resized_bg)
             self.label.configure(image=self.img)
 
@@ -84,7 +84,7 @@ class WaterMarker:
 
     def add_buttons_frame(self, window):
         self.button_frame = Frame(window, width=400, height=1, bg='white')
-        self.button_frame.pack(side=BOTTOM)
+        self.button_frame.pack(side=BOTTOM, fill=X)
 
     def add_button(self, button_frame):
         self.add_image = Button(button_frame, text='Add Images', command=self.adds_image)
@@ -106,7 +106,7 @@ class WaterMarker:
         text_canvas.pack(side=RIGHT, padx=10, pady=10)
         self.text_entry = Entry(text_canvas)
         self.text_entry.pack(fill=BOTH, expand=True)
-        text_canvas.create_window(width/2, height/2, window=self.text_entry, anchor='center',
+        text_canvas.create_window(width / 2, height / 2, window=self.text_entry, anchor='center',
                                   height=height, width=width)
 
     def draw(self):
@@ -120,7 +120,7 @@ class WaterMarker:
         # Frame for image
         self.image_frame(self.window)
         # Create frame for buttons
-        self.button_frame = self.add_buttons_frame(self.window)
+        self.add_buttons_frame(self.window)
         # Button to select image
         self.add_button(self.button_frame)
         # Button to show image in path
@@ -134,14 +134,16 @@ class WaterMarker:
         self.window.mainloop()
 
 
+# self.button_frame =
+
 # Makes directory to save images if directory is not already there
 directories = ['image', 'watermarked']
 parent_dir = os.getcwd()
-for dir in directories:
-    if os.path.isdir(os.path.join(parent_dir, dir)):
+for dire in directories:
+    if os.path.isdir(os.path.join(parent_dir, dire)):
         pass
     else:
-        path = os.path.join(parent_dir, dir)
+        path = os.path.join(parent_dir, dire)
         os.mkdir(path)
 
 # Initializes the class
