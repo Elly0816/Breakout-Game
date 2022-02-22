@@ -119,7 +119,7 @@ class TypeSpeedTest:
             elif event.keysym == "space":
                 self.entry.config(fg='green')
                 self.i += 1
-                print(f"{self.strings.split()[self.word]}, {self.entry.get().split()[self.word]}")
+                # print(f"{self.strings.split()[self.word]}, {self.entry.get().split()[self.word]}")
                 self.word += 1
                 break
             else:
