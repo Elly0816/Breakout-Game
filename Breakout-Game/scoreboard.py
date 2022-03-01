@@ -26,7 +26,7 @@ class ScoreBoard(Turtle):
 
     def add_high_score(self):
         if self.score > self.high_score:
-            self.high_score += self.score
+            self.high_score = self.score
             self.clear()
             self.update_high_score()
             self.update_score()
