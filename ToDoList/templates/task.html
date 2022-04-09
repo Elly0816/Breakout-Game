@@ -1,0 +1,164 @@
+{% extends "bootstrap/base.html" %}
+
+<!DOCTYPE html> {% block content %}
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/styles.css">
+    <script src="https://kit.fontawesome.com/73a1846611.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+    <header>
+        <div class="first">
+            <h5 class='new-list'>
+                <a style="text-decoration:none;color:white;" href=" {{url_for('new') }} " style="color:white;"><strong>+</strong>New List</a>
+            </h5>
+
+            {% if user.is_authenticated %}
+            <h5 class="login">
+                <a style="text-decoration:none;color:white;" href="{{ url_for('login') }}" style="color:white;">Log out</a>
+            </h5>
+            {% else %}
+            <h5 class="login">
+                <a style="text-decoration:none;color:white;" href="{{ url_for('login') }}" style="color:white;">Log in</a>
+            </h5>
+            {% endif %}
+        </div>
+    </header>
+
+    
+    <div class="flex-container">
+
+        {% if user.is_authenticated %}
+        {% if lists %}
+
+        <div class='lists'>
+            <ul>
+                {% for list in lists %}
+                <li>
+                    <span>
+                        <a href="{{ url_for('item', item=list.id, date=list.date) }}" style="text-decoration:none;color:white;">
+                            My to-do list {{ list.date }}
+                        </a>
+                    </span>
+                </li>
+                <hr>
+                {% endfor %}
+            </ul>
+        </div>
+
+        {% endif %}
+        {% endif %}
+
+        <div class="others">
+            <div class="info">
+                <h3 class="name">My to-do list {{ date }}</h3>
+                {% if amount > 0 and from_list %}
+                <h3 class="save">
+                    <a style="text-decoration:none;color:white;" href={{ url_for('save') }}>
+                        <button type="button" class="btn btn-success">🤍 Save This List</button>
+                    </a>
+                </h3>
+                {% endif %}
+            </div>
+        
+            {% if amount > 0 and from_list %}
+            <div class='save_list'>
+                <h4>
+                    🗸 Great, we've created a list for you. You should save your list so you don't forget it.
+                </h4>
+            </div>
+            {% endif %}
+        
+            <div class="create">
+                <h3>Create your to-do list below</h3>
+            </div>
+        
+            <div class="todo">
+                {% if update and user.is_authenticated and save %}
+                <form action="{{ url_for('update', id=task.id)}}" method="POST">
+                    <input value="{{ task.task }}" autocomplete="off" name="task" style="border:none;" type="text" height="10" autofocus placeholder="Write your next task here...">
+                </form>
+                {% elif update and user.is_authenticated and not save %}
+                <form action="{{ url_for('upd_list', name=task)}}" method="POST">
+                    <input value="{{ task }}" autocomplete="off" name="task" style="border:none;" type="text" height="10" autofocus placeholder="Write your next task here...">
+                </form>
+                {% elif update and not user.is_authenticated %}
+                <form action="{{ url_for('upd_list', name=task)}}" method="POST">
+                    <input value="{{ task }}" autocomplete="off" name="task" style="border:none;" type="text" height="10" autofocus placeholder="Write your next task here...">
+                </form>
+                {% else%}
+                <form action="/new" method="POST">
+                    <input autocomplete="off" name="task" style="border:none;" type="text" height="10" autofocus placeholder="Write your next task here...">
+                </form>
+                {% endif %}
+            </div>
+        
+            <ul class="list-group">
+                {% if from_list %}
+                    {% if tasks %}
+                    {% for task in tasks %}
+                        {% for key, value in task.items() %}
+                            <li class="list-group-item">
+                                <span>
+                                    {% if value == False %}
+                                        {{ key }}
+                                    {% else %}
+                                        <s>{{ key }}</s>
+                                    {% endif %} 
+                                    <div class='icons'>
+                                        <a href="{{ url_for('comp_list', name=task) }}" title="mark task as completed"><i class="fa-solid fa-check" style='color:green;padding-left:2em;'></i></a>
+                                        {% for key, value in task.items() %}
+                                        <a href="{{ url_for('upd_list', name=key) }}" title=" update task"><i class="fa-solid fa-arrow-up" style='color:blue;padding-left:2em;'></i></a>
+                                        {% endfor %}
+                                        <a href="{{ url_for('del_list', name=task) }}" title="delete task"><i class="fa-solid fa-circle-minus" style='color:red;padding-left:2em;'></i></a>
+                                    </div>
+                                </span> 
+                            </li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% endif %}
+                {% else %}
+                    {% for task in tasks %}
+                        <li class="list-group-item">
+                            <span>
+                                {% if task.completed %}
+                                <s>{{ task.task }}</s>
+                                {% else %}
+                                {{ task.task }} 
+                                {% endif %}
+                                <div class='icons'>
+                                    <a href="{{ url_for('completed', id=task.id) }}" title="mark task as completed"><i class="fa-solid fa-check" style='color:green;padding-left:2em;'></i></a>
+                                    <a href="{{ url_for('update', id=task.id) }}" title=" update task"><i class="fa-solid fa-arrow-up" style='color:blue;padding-left:2em;'></i></a>
+                                    <a href="{{ url_for('delete', id=task.id) }}" title="delete task"><i class="fa-solid fa-circle-minus" style='color:red;padding-left:2em;'></i></a>
+                                </div>
+                            </span>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        
+
+        </div>
+
+        <footer>
+        
+        </footer>
+
+    </div>
+    
+
+
+
+
+</body>
+
+</html>
+{% endblock %}
