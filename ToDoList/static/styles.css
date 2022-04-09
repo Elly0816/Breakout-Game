@@ -93,6 +93,8 @@ input {
     background-color: #26182e;
     color: white;
     padding: 1em;
+    overflow-y: auto;
+    height: 100vh;
 }
 
 .others {
