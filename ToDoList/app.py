@@ -165,9 +165,21 @@ def item(item, date):
         date = list.date.strftime("%d/%m/%Y")
         tasks = Task.query.filter_by(list_id=list.id).all()
         amount = len(tasks)
+        return render_template('task.html', tasks=tasks, date=date, list=list,
+         amount=amount, user=current_user, lists=lists, from_list=False, save=True, update=False, previous=True)
+    if request.method == "POST":
+        lists = List.query.filter_by(user_id=current_user.id).all()
+        list = List.query.filter_by(id=item, user_id=current_user.id).first()
+        date = list.date.strftime("%d/%m/%Y")
+        new_task = Task(task=request.form.get('task'), completed=False, list_id=list.id)
+        db.session.add(new_task)
+        db.session.commit()
+        tasks = Task.query.filter_by(list_id=list.id).all()
+        amount = len(tasks)
         return render_template('task.html', tasks=tasks, date=date,
-         amount=amount, user=current_user, lists=lists, from_list=False, save=True, update=False)
-
+                amount=amount, user=current_user, lists=lists, from_list=False, save=False)
+                
+        
 # This checks a task from the database as completed
 @app.route('/completed/<int:id>')
 def completed(id):

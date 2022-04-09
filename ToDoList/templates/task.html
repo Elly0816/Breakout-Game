@@ -94,6 +94,10 @@
                 <form action="{{ url_for('upd_list', name=task)}}" method="POST">
                     <input value="{{ task }}" autocomplete="off" name="task" style="border:none;" type="text" height="10" autofocus placeholder="Write your next task here...">
                 </form>
+                {% elif previous %}
+                <form action="{{ url_for('item', item=list.id, date=list.date)}}" method="POST">
+                    <input value="{{ task }}" autocomplete="off" name="task" style="border:none;" type="text" height="10" autofocus placeholder="Write your next task here...">
+                </form>
                 {% else%}
                 <form action="/new" method="POST">
                     <input autocomplete="off" name="task" style="border:none;" type="text" height="10" autofocus placeholder="Write your next task here...">
